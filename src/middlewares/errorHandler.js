@@ -2,7 +2,7 @@ const { STATUS_CODE } = require('../utils/constants.js');
 
 const notFound = (req, res, next) => {
    const error = new Error(`Route ${req.originalUrl} not found!`);
-   return res.status(404).json({
+   return res.status(STATUS_CODE.NOT_FOUND).json({
       success: false,
       message: error.message,
    });

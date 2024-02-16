@@ -4,7 +4,7 @@ const auth = require('../controllers/auth.controller');
 
 const route = express.Router();
 
-route.post('/login', validate.validateLogin(), auth.login);
-route.post('/register', validate.validateRegisterUser(), auth.register);
+route.post('/login', [validate.validateLogin()], auth.login);
+route.post('/register', [validate.validateRegisterUser()], auth.register);
 
 module.exports = route;

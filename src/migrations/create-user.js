@@ -1,7 +1,7 @@
 'use strict';
 
 const { ROLE } = require('../utils/constants');
-
+const { v4 } = require('uuid');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
    async up(queryInterface, Sequelize) {
@@ -9,10 +9,13 @@ module.exports = {
          id: {
             allowNull: false,
             primaryKey: true,
-            type: Sequelize.STRING,
+            type: Sequelize.UUID,
+            unique: true,
+            defaultValue: v4(),
          },
          username: {
             type: Sequelize.STRING,
+            unique: true,
          },
          password: {
             type: Sequelize.STRING,
@@ -22,6 +25,7 @@ module.exports = {
          },
          phone: {
             type: Sequelize.STRING,
+            unique: true,
          },
          refreshToken: {
             type: Sequelize.STRING,

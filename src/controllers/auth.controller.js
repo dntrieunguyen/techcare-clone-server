@@ -1,18 +1,14 @@
-const { validationResult } = require('express-validator');
 const { STATUS_CODE } = require('../utils/constants');
+const db = require('../models');
+const { handleValidationErrors } = require('../utils/helpers');
 
 const login = async (req, res, next) => {
    try {
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-         let message = [];
-         errors.array().forEach(e => message.push(e.msg));
-         return res.status(422).json({ errors: message.join('\n') });
-      }
+      if (handleValidationErrors(req, res)) return;
       return res.status(STATUS_CODE.OK).json({
          success: true,
          message: 'successfully',
+         results,
       });
    } catch (error) {
       next(error);
@@ -20,17 +16,17 @@ const login = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
+   const { username, password, phone, email } = req.body;
    try {
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-         let message = [];
-         errors.array().forEach(e => message.push(e.msg));
-         return res.status(422).json({ errors: message.join('\n') });
-      }
+      if (handleValidationErrors(req, res)) return;
+      // const user = await db.User.create({ username, password, phone, email });
+      const user = await db.User.findOne({
+         where: { phone },
+      });
       return res.status(STATUS_CODE.OK).json({
          success: true,
-         message: 'successfully',
+         message: 'Register successfully',
+         results: user,
       });
    } catch (error) {
       next(error);

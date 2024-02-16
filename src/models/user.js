@@ -1,6 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
+const { ROLE } = require('../utils/constants');
 
 module.exports = (sequelize, DataTypes) => {
    class User extends Model {
@@ -36,14 +37,14 @@ module.exports = (sequelize, DataTypes) => {
          phone: DataTypes.STRING,
          refreshToken: DataTypes.STRING,
          avatar: DataTypes.STRING,
-         role: DataTypes.ENUM,
+         role: DataTypes.ENUM(ROLE.ADMIN, ROLE.CUSTOMER, ROLE.SUPPORTER),
          cartId: DataTypes.STRING,
          ShoppingHistoryId: DataTypes.STRING,
          isBlocked: DataTypes.BOOLEAN,
       },
       {
          sequelize,
-         modelName: 'Users',
+         modelName: 'User',
          hooks: {
             beforeSave: User.hashPassword,
          },

@@ -1,9 +1,10 @@
-import express from 'express';
+const express = require('express');
+const { validate } = require('../middlewares/validator');
+const auth = require('../controllers/auth.controller');
 
 const route = express.Router();
 
-route.get('/login', (req, res) => {
-   res.send('login');
-});
+route.post('/login', validate.validateLogin(), auth.login);
+route.post('/register', validate.validateRegisterUser(), auth.register);
 
 module.exports = route;

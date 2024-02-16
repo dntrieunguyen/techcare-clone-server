@@ -1,7 +1,7 @@
 const ROLE = {
-   ADMIN: '1',
-   SUPPORTER: '2',
-   CUSTOMER: '0',
+   ADMIN: 'admin',
+   SUPPORTER: 'supporter',
+   CUSTOMER: 'agent',
 };
 
 const STATUS_CODE = {

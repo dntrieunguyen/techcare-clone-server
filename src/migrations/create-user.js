@@ -2,8 +2,6 @@
 
 const { ROLE } = require('../utils/constants');
 
-
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
    async up(queryInterface, Sequelize) {
@@ -13,7 +11,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.STRING,
          },
-         name: {
+         username: {
             type: Sequelize.STRING,
          },
          password: {

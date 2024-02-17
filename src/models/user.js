@@ -2,7 +2,6 @@
 const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
 const { ROLE } = require('../utils/constants');
-
 module.exports = (sequelize, DataTypes) => {
    class User extends Model {
       /**
@@ -14,23 +13,32 @@ module.exports = (sequelize, DataTypes) => {
          // define association here
       }
       // Hash password before saving to database
-      static async hashPassword(user, options, next) {
-         if (!user.changed('password')) {
-            next();
+      static async hashPassword(user, options) {
+         if (user.changed('password')) {
+            const saltRounds = 10;
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hashPassword = await bcrypt.hash(user.password, salt);
+            user.password = hashPassword;
          }
-
-         const saltRounds = 10;
-         const salt = await bcrypt.genSaltSync(saltRounds);
-         const hashPassword = await bcrypt.hashSync(user.password, salt);
-         user.password = hashPassword;
       }
       // Check if password is correct
       async isCorrectPassword(password) {
-         return await bcrypt.compareSync(password, this.password);
+         return await bcrypt.compare(password, this.password);
       }
+
+      // static async createPK(user, options) {
+      //    user.id = v4();
+      // }
    }
    User.init(
       {
+         id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            primaryKey: true,
+            unique: true,
+            defaultValue: DataTypes.UUIDV4,
+         },
          username: DataTypes.STRING,
          password: DataTypes.STRING,
          email: DataTypes.STRING,

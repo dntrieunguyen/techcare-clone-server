@@ -1,5 +1,6 @@
 const { STATUS_CODE } = require('../utils/constants');
 const db = require('../models');
+const service = require('../services/auth.service');
 const { handleValidationErrors } = require('../utils/helpers');
 
 const login = async (req, res, next) => {
@@ -19,14 +20,17 @@ const register = async (req, res, next) => {
    const { username, password, phone, email } = req.body;
    try {
       if (handleValidationErrors(req, res)) return;
-      // const user = await db.User.create({ username, password, phone, email });
-      const user = await db.User.findOne({
-         where: { phone },
+      const response = await db.User.create({
+         username,
+         password,
+         phone,
+         email,
       });
+
       return res.status(STATUS_CODE.OK).json({
          success: true,
          message: 'Register successfully',
-         results: user,
+         results: response,
       });
    } catch (error) {
       next(error);

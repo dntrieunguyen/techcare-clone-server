@@ -31,7 +31,19 @@ let validateLogin = () => {
    return [
       check('username', 'username does not Empty').notEmpty(),
       check('password', 'password more than 6 degits').isLength({
-         min: 5,
+         min: 6,
+      }),
+      check('username').custom(async (value, { req }) => {
+         const user = await db.User.findOne({
+            where: { username: value },
+         });
+         if (!user) throw new Error('User not found');
+         if (user) {
+            const isCorrectPassword = await user.isCorrectPassword(
+               req.body.password,
+            );
+            if (isCorrectPassword === false) throw new Error('Wrong password');
+         }
       }),
    ];
 };

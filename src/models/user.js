@@ -26,8 +26,6 @@ module.exports = (sequelize, DataTypes) => {
          return await bcrypt.compare(password, this.password);
       }
 
-      // static async createPK(user, options) {
-      //    user.id = v4();
       // }
    }
    User.init(

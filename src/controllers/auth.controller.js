@@ -1,15 +1,40 @@
 const { STATUS_CODE } = require('../utils/constants');
 const db = require('../models');
-const service = require('../services/auth.service');
+
 const { handleValidationErrors } = require('../utils/helpers');
+const {
+   generateAccessToken,
+   generateRefreshToken,
+} = require('../middlewares/jwt');
 
 const login = async (req, res, next) => {
    try {
+      // Validation error
       if (handleValidationErrors(req, res)) return;
+      // user authenticated
+      const response = await db.User.findOne({
+         where: { username: req.body.username },
+      });
+      // generate accessToken and refreshToken
+      const accessToken = generateAccessToken(response.id, response.role);
+      const refreshToken = generateRefreshToken(response.id);
+      // store accessToken and refreshToken in client
+      req.session.accessToken = accessToken;
+      console.log(req.session);
+
+      // update refreshToken to db
+      await db.User.update(
+         { refreshToken },
+         {
+            where: { id: response.id },
+         },
+      );
+
       return res.status(STATUS_CODE.OK).json({
          success: true,
          message: 'successfully',
-         results,
+         accessToken,
+         results: response,
       });
    } catch (error) {
       next(error);

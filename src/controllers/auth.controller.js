@@ -1,5 +1,6 @@
 const { STATUS_CODE } = require('../utils/constants');
 const db = require('../models');
+const { sessionStore } = require('../config/sessionStore.config');
 
 const { handleValidationErrors } = require('../utils/helpers');
 const {
@@ -20,7 +21,6 @@ const login = async (req, res, next) => {
       const refreshToken = generateRefreshToken(response.id);
       // store accessToken and refreshToken in client
       req.session.accessToken = accessToken;
-      console.log(req.session);
 
       // update refreshToken to db
       await db.User.update(
@@ -62,4 +62,15 @@ const register = async (req, res, next) => {
    }
 };
 
-module.exports = { login, register };
+const logout = async (req, res, next) => {
+   req.session.destroy();
+
+   console.log(req.cookie);
+
+   return res.status(STATUS_CODE.OK).json({
+      success: true,
+      message: 'Logout successfully',
+   });
+};
+
+module.exports = { login, register, logout };

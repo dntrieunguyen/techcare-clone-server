@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initRoutes } from './src/routes/index.js';
-import { dbConnect } from './src/config/dbConnect.js';
+import { dbConnect } from './src/config/dbConnect.config.js';
 import sessionConfig from './src/middlewares/session.js';
 import { sessionStoreConnect } from './src/config/sessionStore.config.js';
 
@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 
 const port = process.env.PORT || 8800;
-// Config session store
+
 app.set('trust proxy', 1);
 
 app.use(

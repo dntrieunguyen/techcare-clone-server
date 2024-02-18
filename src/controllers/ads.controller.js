@@ -1,6 +1,11 @@
+const { STATUS_CODE } = require('../utils/constants');
+
 const getAllAds = async (req, res, next) => {
    try {
-      console.log(req.session);
+      return res.status(STATUS_CODE.OK).json({
+         success: true,
+         message: 'successfully',
+      });
    } catch (error) {
       next(error);
    }

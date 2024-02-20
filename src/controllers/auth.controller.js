@@ -1,6 +1,5 @@
 const { STATUS_CODE } = require('../utils/constants');
 const db = require('../models');
-const { sessionStore } = require('../config/sessionStore.config');
 
 const { handleValidationErrors } = require('../utils/helpers');
 const {
@@ -64,8 +63,6 @@ const register = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
    req.session.destroy();
-
-   console.log(req.cookie);
 
    return res.status(STATUS_CODE.OK).json({
       success: true,

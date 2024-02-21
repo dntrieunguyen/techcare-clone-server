@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-   class Carousel extends Model {
+   class Advertisment extends Model {
       /**
        * Helper method for defining associations.
        * This method is not a part of Sequelize lifecycle.
@@ -10,13 +10,12 @@ module.exports = (sequelize, DataTypes) => {
        */
       static associate(models) {
          // define association here
-         Carousel.belongsTo(models.Ads);
       }
       // Hash password before saving to database
 
       // }
    }
-   Carousel.init(
+   Advertisment.init(
       {
          id: {
             type: DataTypes.INTEGER,
@@ -24,12 +23,14 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
          },
-         img_url: DataTypes.STRING,
+         ad_type: DataTypes.ENUM('carousel', 'banner', 'modal'),
+         image_url: DataTypes.STRING,
       },
       {
          sequelize,
-         modelName: 'Carousel',
+         modelName: 'Advertisment',
       },
    );
-   return Carousel;
+
+   return Advertisment;
 };

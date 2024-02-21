@@ -3,17 +3,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
    async up(queryInterface, Sequelize) {
-      await queryInterface.createTable('Ads', {
+      await queryInterface.createTable('Advertisments', {
          id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
          },
-         carouselId: {
-            type: Sequelize.STRING,
+         ad_type: {
+            type: Sequelize.ENUM('carousel', 'banner', 'modal'),
          },
-         banners: {
+         image_url: {
             type: Sequelize.TEXT,
          },
 
@@ -28,6 +28,6 @@ module.exports = {
       });
    },
    async down(queryInterface, Sequelize) {
-      await queryInterface.dropTable('Ads');
+      await queryInterface.dropTable('Advertisments');
    },
 };

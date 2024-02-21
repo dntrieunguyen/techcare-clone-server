@@ -1,5 +1,5 @@
 const auth = require('./auth.route');
-const ads = require('./ads.route');
+const ads = require('./advertisment.route');
 const user = require('./user.route');
 const { notFound, errHandler } = require('../middlewares/errorHandler');
 

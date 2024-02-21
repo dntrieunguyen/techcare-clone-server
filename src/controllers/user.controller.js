@@ -8,6 +8,7 @@ const getAllUser = async (req, res, next) => {};
 
 const uploadAvatar = async (req, res, next) => {
    try {
+      console.log(req.file);
       if (!req.file)
          return next(
             createError(

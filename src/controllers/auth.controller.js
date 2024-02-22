@@ -1,11 +1,15 @@
 const { STATUS_CODE } = require('../utils/constants');
 const db = require('../models');
+require('dotenv').config();
 
 const { handleValidationErrors } = require('../utils/helpers');
 const {
    generateAccessToken,
    generateRefreshToken,
+   generateForgotPasswordToken,
 } = require('../middlewares/jwt');
+const { createError } = require('../middlewares/errorHandler');
+const { sendMail } = require('../utils/sendMail');
 
 const login = async (req, res, next) => {
    try {
@@ -70,4 +74,54 @@ const logout = async (req, res, next) => {
    });
 };
 
-module.exports = { login, register, logout };
+const forgotPassword = async (req, res, next) => {
+   try {
+      const user = await db.User.findOne({
+         where: { email: req.body.email },
+      });
+
+      if (!user) throw new Error('User not found');
+      const token = generateForgotPasswordToken({ id: user.id });
+      await db.User.update(
+         {
+            passwordResetToken: token,
+            passwordResetExpires: Date.now() + 15 * 60 * 1000, // hour * minute * second * milisecond
+         },
+         {
+            where: { id: user.id },
+         },
+      );
+      req.session.passwordResetToken = token;
+      const html = `Vui lòng nhấp vào liên kết này để thay đổi mật khẩu. Liên kết này sẽ hết hiệu lực trong 15 phút. <a href="${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}">Nhấn vào đây!</a>`;
+      const data = {
+         email: user.email,
+         html,
+      };
+
+      const response = await sendMail(data);
+      return res.status(STATUS_CODE.OK).json({
+         success: true,
+         message: 'Please check mail',
+         response,
+      });
+   } catch (error) {
+      next(error);
+   }
+};
+const resetPassword = async (req, res, next) => {
+   try {
+      const user = await db.User.findOne({ where: { id: req.user.id.id } });
+      await db.User.update(
+         { password: req.body.password },
+         { where: { id: user.id } },
+      );
+      return res.status(STATUS_CODE.OK).json({
+         success: true,
+         message: 'Change password successfully',
+      });
+   } catch (error) {
+      next(error);
+   }
+};
+
+module.exports = { login, register, logout, forgotPassword, resetPassword };

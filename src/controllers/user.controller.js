@@ -4,7 +4,18 @@ const { STATUS_CODE } = require('../utils/constants');
 const cloudinary = require('cloudinary').v2;
 const getCurrentUser = async (req, res, next) => {};
 
-const getAllUser = async (req, res, next) => {};
+const getAllUser = async (req, res, next) => {
+   try {
+      const results = await db.User.findAll();
+      return res.status(STATUS_CODE.OK).json({
+         success: true,
+         message: 'successfully',
+         results,
+      });
+   } catch (error) {
+      next(error);
+   }
+};
 
 const uploadAvatar = async (req, res, next) => {
    try {

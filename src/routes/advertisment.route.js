@@ -9,7 +9,7 @@ const {
 
 const route = express.Router();
 
-route.get('/', [verifyAccessToken, verifyAdmin], ads.getAllAds);
+route.get('/', ads.getAllAds);
 
 route.post(
    '/upload-banner',

@@ -9,6 +9,20 @@ const generateAccessToken = (id, role) =>
 const generateRefreshToken = id =>
    jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: '30d' });
 
+const generateForgotPasswordToken = id =>
+   jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: 15 * 60 }); //h*m*s
+
+const verifyForgotPasswordToken = (req, res, next) => {
+   const token = req.query.token;
+   jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
+      if (err) throw new Error('Token đã hết hạn');
+      return (req.user = decode);
+   });
+   return next();
+   // const token =req.session.
+   // jwt.verify(process.env.SECRET_KEY,)
+};
+
 const verifyAccessToken = (req, res, next) => {
    // get token from client
    const token = req.session.accessToken;
@@ -35,4 +49,6 @@ module.exports = {
    verifyAdmin,
    verifySupporter,
    verifyAccessToken,
+   generateForgotPasswordToken,
+   verifyForgotPasswordToken,
 };

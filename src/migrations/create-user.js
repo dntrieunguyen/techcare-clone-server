@@ -20,6 +20,12 @@ module.exports = {
          password: {
             type: Sequelize.STRING,
          },
+         passwordResetToken: {
+            type: Sequelize.STRING,
+         },
+         passwordResetExpires: {
+            type: Sequelize.DATE,
+         },
          email: {
             type: Sequelize.STRING,
          },

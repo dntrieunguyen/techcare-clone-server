@@ -16,7 +16,6 @@ const storageAvatar = new CloudinaryStorage({
       folder: 'techcare/avatars',
    },
 });
-
 const storageBanner = new CloudinaryStorage({
    cloudinary,
    allowedFormats: ['jpg', 'png'],

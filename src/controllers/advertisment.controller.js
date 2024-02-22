@@ -5,9 +5,11 @@ const cloudinary = require('cloudinary').v2;
 
 const getAllAds = async (req, res, next) => {
    try {
+      const results = await db.Advertisment.findAll();
       return res.status(STATUS_CODE.OK).json({
          success: true,
          message: 'successfully',
+         results,
       });
    } catch (error) {
       next(error);
